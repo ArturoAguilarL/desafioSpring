@@ -2,6 +2,7 @@ package com.example.demo.repositories;
 
 import com.example.demo.dto.ParamsDTO;
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.exceptions.BadRequestExceedsNumberOfFilters;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
@@ -21,31 +22,42 @@ public class MeliRepositoryImpl implements MeliRepository{
     }
 
     @Override
-    public List<ProductDTO> getProducts(ParamsDTO params) {
+    public List<ProductDTO> getProducts(ParamsDTO params) throws BadRequestExceedsNumberOfFilters {
         List<ProductDTO> productsCopy = new ArrayList<ProductDTO>(this.products);
+        int cont = 0;
 
         //Si params tiene seteado de filtrar por nombre
         if(params.getName() != null) {
+            cont++;
             //Saco todos los prods que no tengan el mismo nombre de la lista a devolver.
             productsCopy.removeIf(p -> !p.getName().equals(params.getName()));
         }
         if(params.getCategory() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getCategory().equals(params.getCategory()));
         }
         if(params.getBrand() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getBrand().equals(params.getBrand()));
         }
         if(params.getPrice() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getPrice().equals(params.getPrice()));
         }
         if(params.getQuantity() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getQuantity().equals(params.getQuantity()));
         }
         if(params.getFreeShipping() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getFreeShipping().equals(params.getFreeShipping()));
         }
         if(params.getPrestige() != null){
+            cont++;
             productsCopy.removeIf(p -> !p.getPrestige().equals(params.getPrestige()));
+        }
+        if(cont > 2 || (params.getQuantity() != null & cont == 2)){
+            throw new BadRequestExceedsNumberOfFilters();
         }
 
         return productsCopy;
