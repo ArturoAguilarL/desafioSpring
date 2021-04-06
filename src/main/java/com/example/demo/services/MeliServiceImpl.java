@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.ParamsDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.repositories.MeliRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class MeliServiceImpl implements MeliService {
 
 
     @Override
-    public List<ProductDTO> getProducts() {
-        return meliRepository.getProducts();
+    public List<ProductDTO> getProducts(ParamsDTO params) {
+        return meliRepository.getProducts(params);
     }
 }

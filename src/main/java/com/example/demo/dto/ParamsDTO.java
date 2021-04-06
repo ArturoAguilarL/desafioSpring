@@ -1,16 +1,14 @@
 package com.example.demo.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class ProductDTO {
-    private Integer productId;
+public class ParamsDTO {
     private String name;
     private String category;
     private String brand;

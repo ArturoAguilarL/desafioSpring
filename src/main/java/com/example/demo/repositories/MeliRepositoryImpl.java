@@ -1,5 +1,6 @@
 package com.example.demo.repositories;
 
+import com.example.demo.dto.ParamsDTO;
 import com.example.demo.dto.ProductDTO;
 import org.springframework.stereotype.Repository;
 
@@ -20,10 +21,32 @@ public class MeliRepositoryImpl implements MeliRepository{
     }
 
     @Override
-    public List<ProductDTO> getProducts() {
+    public List<ProductDTO> getProducts(ParamsDTO params) {
         List<ProductDTO> productsCopy = new ArrayList<ProductDTO>(this.products);
-        //ProductDTO prod = new ProductDTO("Remera de Boca","Futbol","Nike",9.000,1,"SI","*****");
-        //products.add(prod);
+
+        //Si params tiene seteado de filtrar por nombre
+        if(params.getName() != null) {
+            //Saco todos los prods que no tengan el mismo nombre de la lista a devolver.
+            productsCopy.removeIf(p -> !p.getName().equals(params.getName()));
+        }
+        if(params.getCategory() != null){
+            productsCopy.removeIf(p -> !p.getCategory().equals(params.getCategory()));
+        }
+        if(params.getBrand() != null){
+            productsCopy.removeIf(p -> !p.getBrand().equals(params.getBrand()));
+        }
+        if(params.getPrice() != null){
+            productsCopy.removeIf(p -> !p.getPrice().equals(params.getPrice()));
+        }
+        if(params.getQuantity() != null){
+            productsCopy.removeIf(p -> !p.getQuantity().equals(params.getQuantity()));
+        }
+        if(params.getFreeShipping() != null){
+            productsCopy.removeIf(p -> !p.getFreeShipping().equals(params.getFreeShipping()));
+        }
+        if(params.getPrestige() != null){
+            productsCopy.removeIf(p -> !p.getPrestige().equals(params.getPrestige()));
+        }
 
         return productsCopy;
     }
@@ -36,8 +59,8 @@ public class MeliRepositoryImpl implements MeliRepository{
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/dbProductos.csv"));
             while((line = br.readLine()) != null) {
                 String[] pr = line.split(splitBy);
-                Double price = Double.valueOf(cleanPrice(pr[3]));
-                ProductDTO product = new ProductDTO(pr[0],pr[1],pr[2],price,Integer.parseInt(pr[4]),pr[5].equals("SI"),pr[6].length());
+                Double price = Double.valueOf(cleanPrice(pr[4]));
+                ProductDTO product = new ProductDTO(Integer.parseInt(pr[0]),pr[1],pr[2],pr[3],price,Integer.parseInt(pr[5]),pr[6].equals("SI"),pr[7].length());
                 products.add(product);
             }
             br.close();
