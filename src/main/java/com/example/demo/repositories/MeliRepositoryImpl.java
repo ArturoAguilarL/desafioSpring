@@ -19,6 +19,7 @@ import java.util.List;
 @Repository
 public class MeliRepositoryImpl implements MeliRepository{
     List<ProductDTO> products;
+    private Integer ticketCount = 0;
 
     public MeliRepositoryImpl() {
         this.products = parseCSV();
@@ -104,6 +105,12 @@ public class MeliRepositoryImpl implements MeliRepository{
 
         return products;
     }
+
+    public int getTicketCount(){
+        return this.ticketCount++;
+    }
+
+
 
     public static List<ProductDTO> parseCSV(){
         String splitBy = ",";

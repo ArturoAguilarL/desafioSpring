@@ -9,14 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class ParamsDTO {
+
+public class ArticleDTO {
+    private Integer productId;
     private String name;
-    private String category;
     private String brand;
-    private Double price;
     private Integer quantity;
-    private Boolean freeShipping;
-    private Integer prestige;
-    private Integer order;
 }
