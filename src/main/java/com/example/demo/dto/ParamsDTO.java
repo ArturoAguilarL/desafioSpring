@@ -16,4 +16,5 @@ public class ParamsDTO {
     private Integer quantity;
     private Boolean freeShipping;
     private Integer prestige;
+    private Integer order;
 }

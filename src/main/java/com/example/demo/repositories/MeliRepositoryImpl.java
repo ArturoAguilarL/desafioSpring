@@ -3,6 +3,7 @@ package com.example.demo.repositories;
 import com.example.demo.dto.ParamsDTO;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.exceptions.BadRequestExceedsNumberOfFilters;
+import com.example.demo.exceptions.BadRequestTypeOrderInvalid;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
@@ -10,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -22,7 +25,7 @@ public class MeliRepositoryImpl implements MeliRepository{
     }
 
     @Override
-    public List<ProductDTO> getProducts(ParamsDTO params) throws BadRequestExceedsNumberOfFilters {
+    public List<ProductDTO> getProducts(ParamsDTO params) throws BadRequestExceedsNumberOfFilters, BadRequestTypeOrderInvalid {
         List<ProductDTO> productsCopy = new ArrayList<ProductDTO>(this.products);
         int cont = 0;
 
@@ -56,11 +59,50 @@ public class MeliRepositoryImpl implements MeliRepository{
             cont++;
             productsCopy.removeIf(p -> !p.getPrestige().equals(params.getPrestige()));
         }
-        if(cont > 2 || (params.getQuantity() != null & cont == 2)){
+
+        if(params.getOrder() != null){
+            productsCopy = orderProducts(productsCopy, params.getOrder());
+        }
+        if((cont > 2 & params.getOrder() == null) || (params.getQuantity() != null & cont == 2)){
             throw new BadRequestExceedsNumberOfFilters();
         }
 
         return productsCopy;
+    }
+
+    private List<ProductDTO> orderProducts(List<ProductDTO> products,Integer typeOrder) throws BadRequestTypeOrderInvalid {
+
+        Comparator<ProductDTO> prComparator = null;
+
+        switch (typeOrder) {
+            //Ord Alfabetico ascendent
+            case 0:
+                prComparator = Comparator.comparing(ProductDTO::getName, Comparator.naturalOrder());
+                break;
+
+            //Alfabetico descendente
+            case 1:
+                prComparator = Comparator.comparing(ProductDTO::getName, Comparator.reverseOrder());
+                break;
+
+            //Mayor a menor precio
+            case 2:
+                prComparator = Comparator.comparing(ProductDTO::getPrice, Comparator.reverseOrder());
+                break;
+
+            //Menor a mayor precio
+            case 3:
+                prComparator = Comparator.comparing(ProductDTO::getPrice, Comparator.naturalOrder());
+                break;
+
+            default:
+                //Excepcion no existe el numero de tipo de ordenamiento
+                throw new BadRequestTypeOrderInvalid();
+        }
+        if(prComparator != null)
+            products.sort(prComparator);
+
+        return products;
     }
 
     public static List<ProductDTO> parseCSV(){
@@ -85,7 +127,6 @@ public class MeliRepositoryImpl implements MeliRepository{
         }
         return products;
     }
-
 
     private static String cleanPrice(String price) {
         char[] arr = price.toCharArray();
