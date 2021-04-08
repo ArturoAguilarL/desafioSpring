@@ -40,7 +40,6 @@ public class MeliController {
         return meliService.processPurchaseRequest(request);
     }
 
-
     @ExceptionHandler(MeliException.class)
     public ResponseEntity<ErrorDTO> handleException(MeliException exception){
         return new ResponseEntity<>(exception.getError(),exception.getStatus());
