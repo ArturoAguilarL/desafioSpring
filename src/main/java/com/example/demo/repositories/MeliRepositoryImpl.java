@@ -110,6 +110,14 @@ public class MeliRepositoryImpl implements MeliRepository{
         return this.ticketCount++;
     }
 
+    @Override
+    public void updateProductQuantity(Integer productId, Integer quantity) {
+        for(ProductDTO prd : this.products){
+            if(prd.getProductId().equals(productId)){
+                prd.setQuantity(prd.getQuantity() - quantity);
+            }
+        }
+    }
 
 
     public static List<ProductDTO> parseCSV(){

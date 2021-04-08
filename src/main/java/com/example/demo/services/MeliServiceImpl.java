@@ -59,8 +59,9 @@ public class MeliServiceImpl implements MeliService {
                 if (prd.getProductId().equals(id)) {
                     if (this.requestMap.get(id) <= prd.getQuantity()) {
                         total = total + this.requestMap.get(id) * prd.getPrice();
+                        meliRepository.updateProductQuantity(prd.getProductId(),this.requestMap.get(id));
                     } else {
-                        throw new ProductNoStock(prd.getName(),prd.getQuantity(),this.requestMap.get(id));
+                        throw new ProductNoStock(prd.getName(),this.requestMap.get(id),prd.getQuantity());
                     }
                     productExists = true;
                 }

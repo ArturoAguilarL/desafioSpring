@@ -11,4 +11,6 @@ public interface MeliRepository {
     List<ProductDTO> getProducts(ParamsDTO params) throws BadRequestExceedsNumberOfFilters, BadRequestTypeOrderInvalid;
 
     public int getTicketCount();
+
+    void updateProductQuantity(Integer productId, Integer integer);
 }
