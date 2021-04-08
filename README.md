@@ -28,4 +28,4 @@ guarda los elementos en una lista y luego cunado se le manda un purchase-request
       - Hacer una conexion entre estos puntos y el punto 9 del carrito de compras, que cada cliente tenga un carrito de
     compras, y cuando se hace un purchase-request que reciba el clientId
         para poder asignarle a ese client esa compra. Y en el punto 9 cuando me pidan
-        obtener el total, devolvera el tota para ese cliente.
+        obtener el total, devolvera el tota para ese cliente. 
