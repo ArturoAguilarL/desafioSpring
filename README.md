@@ -15,6 +15,13 @@ guarda los elementos en una lista y luego cunado se le manda un purchase-request
     - getClients funciona como ""api/v1/getClients"
     - opcion de filtrar por provincia: ""api/v1/getClients?province=Buenos%20Aires"
     
+- Punto 9: "api/v1/purchase-request/finishBuy" -> GET METHOD
+  Al hacer varias compras en una misma sesion(no cerrar el programa) 
+  guarda el historial de tickets y al hacer "finishBuy" devuelve todos los tickets con el total.
+  Realizado con un GET ya que no recibe ningun parametro y no necesit aun body
+  directamente, dada la sesion, trae todo el shipping cart que tenga con su total.
+  Mejora: que reciba un clientId para que, dado el clientId me devuelva su shipping cart.
+  
 - Mejoras a estos puntos: 
     - Que levante de un archivo todos los clientes y los vaya guardando, asi para probar es mas comodo, para probar se 
     hacer post primero para crear el cliente y luego traerlos con get.
