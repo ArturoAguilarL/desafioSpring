@@ -1,7 +1,6 @@
 package com.example.demo.repositories;
 
-import com.example.demo.dto.ParamsDTO;
-import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.*;
 import com.example.demo.exceptions.BadRequestExceedsNumberOfFilters;
 import com.example.demo.exceptions.BadRequestTypeOrderInvalid;
 import org.springframework.stereotype.Repository;
@@ -19,10 +18,12 @@ import java.util.List;
 @Repository
 public class MeliRepositoryImpl implements MeliRepository{
     List<ProductDTO> products;
+    List<TicketDTO> tickets;
     private Integer ticketCount = 0;
 
     public MeliRepositoryImpl() {
         this.products = parseCSV();
+        this.tickets = new ArrayList<>();
     }
 
     @Override
@@ -117,6 +118,27 @@ public class MeliRepositoryImpl implements MeliRepository{
                 prd.setQuantity(prd.getQuantity() - quantity);
             }
         }
+    }
+
+    @Override
+    public void saveTicket(TicketDTO ticket) {
+        //Validar
+        this.tickets.add(ticket);
+    }
+
+    @Override
+    public ShippingCartDTO getPurchases() {
+        ShippingCartDTO pr = null;
+        double totalAmount = 0.0;
+        for(TicketDTO t : tickets){
+            totalAmount = totalAmount + pr.getTotal();
+        }
+        List<TicketDTO> auxCopy = new ArrayList<>(this.tickets);
+        pr.setTickets(auxCopy);
+        pr.setTotal(totalAmount);
+        StatusDTO status = new StatusDTO(200, "La solicitud de compra total del carrito se hizo conn exito");
+        pr.setStatusCode(status);
+        return pr;
     }
 
 

@@ -1,7 +1,6 @@
 package com.example.demo.repositories;
 
-import com.example.demo.dto.ParamsDTO;
-import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.*;
 import com.example.demo.exceptions.BadRequestExceedsNumberOfFilters;
 import com.example.demo.exceptions.BadRequestTypeOrderInvalid;
 
@@ -13,4 +12,8 @@ public interface MeliRepository {
     public int getTicketCount();
 
     void updateProductQuantity(Integer productId, Integer integer);
+
+    void saveTicket(TicketDTO ticket);
+
+    ShippingCartDTO getPurchases();
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MeliServiceImpl implements MeliService {
     @Override
     public ResponsePurchaseDTO processPurchaseRequest(PurchaseDTO request) throws BadRequestExceedsNumberOfFilters, BadRequestTypeOrderInvalid, ProductIdNotFound, ProductNoStock {
         List<ProductDTO> productsInStock;
+        this.requestMap.clear();
         this.addArticles(request.getArticles());
         ResponsePurchaseDTO response = null;
         TicketDTO ticket = null;
@@ -47,8 +49,14 @@ public class MeliServiceImpl implements MeliService {
         status = new StatusDTO(200, "La solicitud de compra se completo con exito");
         response.setStatusCode(status);
 
+        meliRepository.saveTicket(ticket);
 
         return response;
+    }
+
+    @Override
+    public ShippingCartDTO finishBuy() {
+        return meliRepository.getPurchases();
     }
 
     private double calculatePurchase(PurchaseDTO request, List<ProductDTO> products) throws ProductNoStock, ProductIdNotFound {

@@ -1,11 +1,7 @@
 package com.example.demo.controllers;
 
 
-import com.example.demo.dto.ErrorDTO;
-import com.example.demo.dto.ParamsDTO;
-import com.example.demo.dto.ProductDTO;
-import com.example.demo.dto.ResponsePurchaseDTO;
-import com.example.demo.dto.PurchaseDTO;
+import com.example.demo.dto.*;
 import com.example.demo.exceptions.*;
 import com.example.demo.services.MeliService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +34,11 @@ public class MeliController {
     @PostMapping(value = "api/v1/purchase-request")
     public ResponsePurchaseDTO purchaseRequest(@RequestBody PurchaseDTO request) throws ProductIdNotFound, BadRequestExceedsNumberOfFilters, ProductNoStock, BadRequestTypeOrderInvalid {
         return meliService.processPurchaseRequest(request);
+    }
+
+    @GetMapping(value = "api/v1/purchase-request/finishBuy")
+    public ShippingCartDTO finishBuy() throws ProductIdNotFound, BadRequestExceedsNumberOfFilters, ProductNoStock, BadRequestTypeOrderInvalid {
+        return meliService.finishBuy();
     }
 
     @ExceptionHandler(MeliException.class)

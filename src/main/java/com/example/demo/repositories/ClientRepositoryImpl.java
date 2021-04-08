@@ -9,32 +9,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ClientRepositoryImpl implements ClientRepository{
+public class ClientRepositoryImpl implements ClientRepository {
     List<ClientDTO> clients;
     Integer cont;
-    public ClientRepositoryImpl(){
+
+    public ClientRepositoryImpl() {
         this.clients = new ArrayList<>();
         cont = 0;
     }
+
     @Override
     public void saveClient(ClientDTO client) throws ClientAlreadyExist {
-        if(!this.clients.contains(client)) {
-            client.setClientId(cont);
-            this.clients.add(client);
-            cont++;
+        for (ClientDTO cli : clients) {
+            if(cli.getEmail().equals(client.getEmail())) {
+                throw new ClientAlreadyExist();
+            }
         }
-        else
-            throw new ClientAlreadyExist();
+        client.setClientId(cont);
+        this.clients.add(client);
+        cont++;
 
     }
 
-    @Override
-    public List<ClientDTO> getClients(String param) {
-        List<ClientDTO> clientsCopy = new ArrayList<ClientDTO>(this.clients);
-        //Hacer el filtrado
-        if(param != null){
-            clientsCopy.removeIf(p -> !p.getAddress().getProvince().equals(param));
+        @Override
+        public List<ClientDTO> getClients (String param){
+            List<ClientDTO> clientsCopy = new ArrayList<ClientDTO>(this.clients);
+            //Hacer el filtrado
+            if (param != null) {
+                clientsCopy.removeIf(p -> !p.getAddress().getProvince().equals(param));
+            }
+            return clientsCopy;
         }
-        return clientsCopy;
     }
-}
