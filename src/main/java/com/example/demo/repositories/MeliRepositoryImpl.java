@@ -128,13 +128,13 @@ public class MeliRepositoryImpl implements MeliRepository{
 
     @Override
     public ShippingCartDTO getPurchases() {
-        ShippingCartDTO pr = null;
+        ShippingCartDTO pr = new ShippingCartDTO();
         double totalAmount = 0.0;
         for(TicketDTO t : tickets){
-            totalAmount = totalAmount + pr.getTotal();
+            totalAmount = totalAmount + t.getTotal();
         }
         List<TicketDTO> auxCopy = new ArrayList<>(this.tickets);
-        pr.setTickets(auxCopy);
+        pr.addTickets(auxCopy);
         pr.setTotal(totalAmount);
         StatusDTO status = new StatusDTO(200, "La solicitud de compra total del carrito se hizo conn exito");
         pr.setStatusCode(status);
